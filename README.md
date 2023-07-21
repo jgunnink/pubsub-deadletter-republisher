@@ -17,9 +17,9 @@ It includes:
 Once you've deployed your function, call it like so:
 
 ```bash
-curl -X POST https://<REGION>-<PROJECT>.cloudfunctions.net/republisher \
+curl -X POST https://<REGION>-<PROJECT_ID>.cloudfunctions.net/republisher \
   -H "Content-Type: application/json" \
-  -d '{"subscriptionName": "test-queue-deadletter-sub","topicName": "test-queue"}'
+  -d '{"subscriptionName": "projects/<PROJECT_ID>/subscriptions/test-queue-deadletter-sub","topicName": "projects/<PROJECT_ID>/topics/test-queue"}'
 ```
 
 ### Local hosting
@@ -29,9 +29,9 @@ curl -X POST https://<REGION>-<PROJECT>.cloudfunctions.net/republisher \
 You can then run something like:
 
 ```bash
-curl -X POST -H "Content-Type: application/json" \
-    -d '{"subscriptionName": "test-queue-deadletter-sub", "topicName": "test-queue" }' \
-    http://localhost:8080
+curl -X POST http://localhost:8080 \
+  -H "Content-Type: application/json" \
+  -d '{"subscriptionName": "projects/<PROJECT_ID>/subscriptions/test-queue-deadletter-sub","topicName": "projects/<PROJECT_ID>/topics/test-queue"}'
 ```
 
 To see how your function would respond once deployed.
