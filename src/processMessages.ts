@@ -17,8 +17,8 @@ export async function republishMessages(
   topicName: string,
   timeout = 3000,
   maxSimultaneousMessages = 20,
-): Promise<void> {
-  await pullFromSubscriptionAndProcess(
+): Promise<number> {
+  return await pullFromSubscriptionAndProcess(
     subscriptionName,
     async (message: Message) => {
       await publishToTopic(topicName, message);
@@ -35,8 +35,9 @@ async function pullFromSubscriptionAndProcess(
   processMessage: (message: Message) => Promise<void>,
   timeout = 3000,
   maxSimultaneousMessages = 20,
-): Promise<void> {
+): Promise<number> {
   let mostRecentMessageTimestamp = 0;
+  let counter = 0;
 
   const processingMessageIds = new Set<string>();
   const subscription = pubSubClient.subscription(subscriptionName, {
@@ -50,6 +51,7 @@ async function pullFromSubscriptionAndProcess(
       await processMessage(message);
       message.ack();
       console.info(`Processed message ${message.id}`);
+      counter++;
     } catch (err) {
       console.error(`Error processing message ${message.id}: ${err}`);
       message.nack();
@@ -72,6 +74,8 @@ async function pullFromSubscriptionAndProcess(
   function getTimeSinceMostRecent() {
     return Date.now() - mostRecentMessageTimestamp;
   }
+
+  return counter;
 }
 
 // ensure processing messages happens one at a time per topic, otherwise we hit a rate limit with GCP

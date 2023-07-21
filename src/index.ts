@@ -15,7 +15,8 @@ export const republish = (req: Request, res: Response) => {
     console.log("Processor finished");
   } else {
     republishMessages(args.subscriptionName, args.topicName, args.timeout, args.maxSimultaneousMessages)
-      .then(() => {
+      .then(count => {
+        console.info(`Suceessfully republished ${count} messages`);
         res.status(202).send();
       })
       .catch(err => {
