@@ -1,8 +1,8 @@
 substitutions:
   _RUNTIME: nodejs18
-  _SERVICE_NAME: hello-world
+  _SERVICE_NAME: republisher
   _REGION: australia-southeast1
-  _ENTRY_POINT: helloWorld
+  _ENTRY_POINT: republish
 
 steps:
   - name: node

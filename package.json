@@ -1,12 +1,12 @@
 {
   "name": "ts-template",
   "version": "1.2.1",
-  "description": "A typescript function which is a template for building cloud functions on GCP quickly.",
-  "repository": "jgunnink/typescript-cloud-function-template",
+  "description": "A typescript function which allows for (re)publishing dead-letter messages to a given topic.",
+  "repository": "jgunnink/pubsub-deadletter-republisher",
   "main": "dist/index.js",
   "scripts": {
-    "start": "npx tsc-watch --onSuccess 'npx @google-cloud/functions-framework --target=helloWorld'",
-    "deploy": "gcloud functions deploy ts-template --gen2 --runtime=nodejs18 --trigger-http --allow-unauthenticated --region australia-southeast1 --entry-point=helloWorld",
+    "start": "npx tsc-watch --onSuccess 'npx @google-cloud/functions-framework --target=republish'",
+    "deploy": "gcloud functions deploy ts-template --gen2 --runtime=nodejs18 --trigger-http --allow-unauthenticated --region australia-southeast1 --entry-point=republish",
     "build": "npx tsc",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' nyc --reporter=lcov mocha -r ts-node/register 'tests/**/*.ts'"
   },
@@ -17,13 +17,16 @@
     "typescript": "^5.1.6"
   },
   "devDependencies": {
+    "@google-cloud/pubsub": "^3.7.1",
     "@types/chai": "^4.3.5",
     "@types/express": "^4.17.17",
     "@types/mocha": "^10.0.0",
     "@types/node": "^20.4.2",
+    "@types/sinon": "^10.0.15",
     "chai": "^4.3.7",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
+    "sinon": "^15.2.0",
     "ts-node": "^10.9.1",
     "tsc-watch": "^6.0.4"
   }

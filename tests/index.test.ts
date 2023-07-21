@@ -1,38 +1,77 @@
 import { expect } from "chai";
-import { helloWorld } from "../src/index";
+import * as sinon from "sinon";
+import { republish } from "../src/index";
 import { Request, Response } from "express";
+import { RepublishMessagesOptions } from "../src/processMessages";
+import * as republishMessagesFile from "../src/processMessages";
 
-interface testObject {
-  args: Partial<Request>;
-  expected: any; // We use any here to allow any kind of test response from the function to be passed in.
-}
+const testBody: RepublishMessagesOptions = {
+  subscriptionName: "test-subscription",
+  topicName: "test-topic",
+};
 
-describe("when a message is provided", () => {
-  const tests: testObject[] = [
-    { args: { body: { message: "Hi" } }, expected: { message: "Hi" } },
-    { args: { body: { message: "12" } }, expected: { message: "12" } },
-  ];
+describe("republish handler", () => {
+  it("should return a 201 response", async () => {
+    const mockRepublishMessages = sinon.mock(republishMessagesFile);
+    const req = { body: testBody };
+    const res = { status: sinon.stub(), send: sinon.stub() };
+    res.status.returns(res);
+    mockRepublishMessages
+      .expects("republishMessages")
+      .once()
+      .withArgs(testBody.subscriptionName, testBody.topicName, undefined, undefined)
+      .resolves();
 
-  tests.forEach(({ args, expected }) => {
-    it(`returns ${args.body.message} when request body is ${JSON.stringify(args.body)}`, () => {
-      const result = helloWorld(args as Request, { send: () => null } as Response);
-      expect(result).to.deep.eq(expected);
-    });
+    await republish(req as Request, res as unknown as Response);
+
+    mockRepublishMessages.verify();
+
+    expect(res.status.calledOnceWith(201)).to.be.true;
   });
-});
 
-describe("when a message is not provided", () => {
-  const tests: testObject[] = [
-    { args: { body: { message: "" } }, expected: { message: "Hello World!" } },
-    { args: { body: { message: undefined } }, expected: { message: "Hello World!" } },
-    { args: { body: {} }, expected: { message: "Hello World!" } },
-    { args: { body: { otherKey: "What?" } }, expected: { message: "Hello World!" } },
-  ];
+  it("should return a 400 response if subscriptionName is not provided", async () => {
+    const mockRepublishMessages = sinon.mock(republishMessagesFile);
+    const req = { body: { topicName: testBody.topicName } };
+    const res = { status: sinon.stub(), send: sinon.stub() };
+    res.status.returns(res);
+    mockRepublishMessages.expects("republishMessages").never();
 
-  tests.forEach(({ args, expected }) => {
-    it(`returns Hello World! when request body is ${JSON.stringify(args.body)}`, () => {
-      const result = helloWorld(args as Request, { send: () => null } as Response);
-      expect(result).to.deep.eq(expected);
-    });
+    await republish(req as Request, res as unknown as Response);
+
+    mockRepublishMessages.verify();
+
+    expect(res.status.calledOnceWith(400)).to.be.true;
+  });
+
+  it("should return a 400 response if topicName is not provided", async () => {
+    const mockRepublishMessages = sinon.mock(republishMessagesFile);
+    const req = { body: { subscriptionName: testBody.subscriptionName } };
+    const res = { status: sinon.stub(), send: sinon.stub() };
+    res.status.returns(res);
+    mockRepublishMessages.expects("republishMessages").never();
+
+    await republish(req as Request, res as unknown as Response);
+
+    mockRepublishMessages.verify();
+
+    expect(res.status.calledOnceWith(400)).to.be.true;
+  });
+
+  it("should return a 500 response if republishMessages throws an error", async () => {
+    const mockRepublishMessages = sinon.mock(republishMessagesFile);
+    const req = { body: testBody };
+    const res = { status: sinon.stub(), send: sinon.stub() };
+    res.status.returns(res);
+    mockRepublishMessages
+      .expects("republishMessages")
+      .once()
+      .withArgs(testBody.subscriptionName, testBody.topicName, undefined, undefined)
+      .rejects("test error");
+
+    await republish(req as Request, res as unknown as Response);
+
+    mockRepublishMessages.verify();
+
+    expect(res.status.calledOnceWith(500)).to.be.true;
   });
 });

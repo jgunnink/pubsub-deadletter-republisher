@@ -1,7 +1,9 @@
-# Cloud Functions Typescript Template
+# Pubsub Deadletter Republisher
 
-This repo is to help get building faster with typescript on Google
-[Cloud Functions](https://cloud.google.com/functions).
+This repo is a cloud function which can be invoked to pull messages from a dead-letter topic and re-publish them to another topic for
+processing.
+
+This work is inspired by [Roger Beaman's gcp-pubsub-republish](https://github.com/sirrodgepodge/gcp-pubsub-republish)
 
 It includes:
 
