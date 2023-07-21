@@ -1,0 +1,30 @@
+{
+  "name": "ts-template",
+  "version": "1.2.1",
+  "description": "A typescript function which is a template for building cloud functions on GCP quickly.",
+  "repository": "jgunnink/typescript-cloud-function-template",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "npx tsc-watch --onSuccess 'npx @google-cloud/functions-framework --target=helloWorld'",
+    "deploy": "gcloud functions deploy ts-template --gen2 --runtime=nodejs18 --trigger-http --allow-unauthenticated --region australia-southeast1 --entry-point=helloWorld",
+    "build": "npx tsc",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' nyc --reporter=lcov mocha -r ts-node/register 'tests/**/*.ts'"
+  },
+  "author": "JK Gunnink",
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.3.0",
+    "typescript": "^5.1.6"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.5",
+    "@types/express": "^4.17.17",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^20.4.2",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "ts-node": "^10.9.1",
+    "tsc-watch": "^6.0.4"
+  }
+}
