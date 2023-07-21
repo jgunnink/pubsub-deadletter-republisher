@@ -14,6 +14,14 @@ It includes:
 
 ## Usage
 
+Once you've deployed your function, call it like so:
+
+```bash
+curl -X POST https://<REGION>-<PROJECT>.cloudfunctions.net/republisher \
+  -H "Content-Type: application/json" \
+  -d '{"subscriptionName": "test-queue-deadletter-sub","topicName": "test-queue"}'
+```
+
 ### Local hosting
 
 `npm start` will kick up the server and host your code on port 8080.
@@ -22,7 +30,7 @@ You can then run something like:
 
 ```bash
 curl -X POST -H "Content-Type: application/json" \
-    -d '{"message": "Hello my friend"}' \
+    -d '{"subscriptionName": "test-queue-deadletter-sub", "topicName": "test-queue" }' \
     http://localhost:8080
 ```
 
