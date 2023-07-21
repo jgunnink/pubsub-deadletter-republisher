@@ -26,7 +26,7 @@ describe("republish handler", () => {
 
     mockRepublishMessages.verify();
 
-    expect(res.status.calledOnceWith(201)).to.be.true;
+    expect(res.status.calledOnceWith(202)).to.be.true;
   });
 
   it("should return a 400 response if subscriptionName is not provided", async () => {

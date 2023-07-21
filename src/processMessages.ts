@@ -44,12 +44,14 @@ async function pullFromSubscriptionAndProcess(
   });
   subscription.on("message", async (message: Message) => {
     try {
+      console.info(`Received message ${message.id}`);
       mostRecentMessageTimestamp = Date.now();
       processingMessageIds.add(message.id);
       await processMessage(message);
       message.ack();
+      console.info(`Processed message ${message.id}`);
     } catch (err) {
-      console.error(err);
+      console.error(`Error processing message ${message.id}: ${err}`);
       message.nack();
     } finally {
       processingMessageIds.delete(message.id);

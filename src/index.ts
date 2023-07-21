@@ -12,10 +12,11 @@ export const republish = (req: Request, res: Response) => {
 
   if (!args.subscriptionName || !args.topicName) {
     res.status(400).send("subscriptionName and topicName are required");
+    console.log("Processor finished");
   } else {
     republishMessages(args.subscriptionName, args.topicName, args.timeout, args.maxSimultaneousMessages)
       .then(() => {
-        res.status(201).send();
+        res.status(202).send();
       })
       .catch(err => {
         console.error(err);
