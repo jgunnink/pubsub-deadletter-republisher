@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { RepublishMessagesOptions, republishMessages } from "./processMessages";
 
 export const republish = (req: Request, res: Response) => {
+  console.time("duration");
+  var timer = Date.now();
   console.log("Processor started");
   const args: RepublishMessagesOptions = {
     subscriptionName: req.body.subscriptionName,
@@ -17,7 +19,9 @@ export const republish = (req: Request, res: Response) => {
     republishMessages(args.subscriptionName, args.topicName, args.timeout, args.maxSimultaneousMessages)
       .then(count => {
         console.info(`Successfully republished ${count} messages`);
-        res.status(202).send(`Successfully republished ${count} messages\n`);
+        timer = (Date.now() - timer) / 1000;
+        res.status(202).send(`Successfully republished ${count} messages. Took ${timer} seconds \n`);
+        console.timeEnd("duration");
       })
       .catch(err => {
         console.error(err);
