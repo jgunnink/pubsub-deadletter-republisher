@@ -25,3 +25,4 @@ steps:
       - --region=${_REGION}
       - --entry-point=${_ENTRY_POINT}
       - --memory=128Mi
+      - --timeout=600
