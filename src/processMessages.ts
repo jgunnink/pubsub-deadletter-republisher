@@ -45,7 +45,6 @@ async function pullFromSubscriptionAndProcess(
   });
   subscription.on("message", async (message: Message) => {
     try {
-      console.info(`Received message ${message.id}`);
       mostRecentMessageTimestamp = Date.now();
       processingMessageIds.add(message.id);
       await processMessage(message);
