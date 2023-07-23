@@ -11,7 +11,7 @@ const testBody: RepublishMessagesOptions = {
 };
 
 describe("republish handler", () => {
-  it("should return a 201 response", async () => {
+  it("should return a 202 response when at least one message has been processed", async () => {
     const mockRepublishMessages = sinon.mock(republishMessagesFile);
     const req = { body: testBody };
     const res = { status: sinon.stub(), send: sinon.stub() };
@@ -20,13 +20,31 @@ describe("republish handler", () => {
       .expects("republishMessages")
       .once()
       .withArgs(testBody.subscriptionName, testBody.topicName, undefined, undefined)
-      .resolves();
+      .resolves(1);
 
     await republish(req as Request, res as unknown as Response);
 
     mockRepublishMessages.verify();
 
     expect(res.status.calledOnceWith(202)).to.be.true;
+  });
+
+  it("should return a 200 response when no messages have been processed", async () => {
+    const mockRepublishMessages = sinon.mock(republishMessagesFile);
+    const req = { body: testBody };
+    const res = { status: sinon.stub(), send: sinon.stub() };
+    res.status.returns(res);
+    mockRepublishMessages
+      .expects("republishMessages")
+      .once()
+      .withArgs(testBody.subscriptionName, testBody.topicName, undefined, undefined)
+      .resolves(0);
+
+    await republish(req as Request, res as unknown as Response);
+
+    mockRepublishMessages.verify();
+
+    expect(res.status.calledOnceWith(200)).to.be.true;
   });
 
   it("should return a 400 response if subscriptionName is not provided", async () => {

@@ -49,7 +49,6 @@ async function pullFromSubscriptionAndProcess(
       processingMessageIds.add(message.id);
       await processMessage(message);
       message.ack();
-      console.info(`Processed message ${message.id}`);
       counter++;
     } catch (err) {
       console.error(`Error processing message ${message.id}: ${err}`);
