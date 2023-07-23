@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { RepublishMessagesOptions, republishMessages } from "./processMessages";
 
 export const republish = (req: Request, res: Response) => {
-  var timer = Date.now();
+  const timer = Date.now();
   console.log("Processor started with process ID: ", timer);
   const args: RepublishMessagesOptions = {
     subscriptionName: req.body.subscriptionName,
@@ -17,16 +17,17 @@ export const republish = (req: Request, res: Response) => {
   } else {
     republishMessages(args.subscriptionName, args.topicName, args.timeout, args.maxSimultaneousMessages)
       .then(count => {
-        console.info(`Successfully republished ${count} messages`);
-        timer = (Date.now() - timer) / 1000;
+        const duration = (Date.now() - timer) / 1000;
         if (count === 0) {
-          res.status(200).send(`No messages to republish. Process took ${timer} seconds \n`);
+          console.info(`No messages to republish.`);
+          res.status(200).send(`No messages to republish. Process took ${duration} seconds \n`);
         } else {
-          res.status(202).send(`Successfully republished ${count} messages. Process took ${timer} seconds \n`);
+          console.info(`Successfully republished ${count} messages`);
+          res.status(202).send(`Successfully republished ${count} messages. Process took ${duration} seconds \n`);
         }
       })
       .catch(err => {
-        console.error("Something went wrong processing messages. Error: ", err, ". Process ID: ", timer);
+        console.error("Something went wrong processing messages. Error: ", err);
         res.status(500).send(err);
       })
       .finally(() => {
