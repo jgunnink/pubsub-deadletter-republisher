@@ -21,7 +21,6 @@ steps:
       - --gen2
       - --runtime=${_RUNTIME}
       - --trigger-http
-      - --allow-unauthenticated
       - --region=${_REGION}
       - --entry-point=${_ENTRY_POINT}
       - --memory=128Mi

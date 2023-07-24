@@ -18,6 +18,7 @@ Once you've deployed your function, call it like so:
 
 ```bash
 curl -X POST https://<REGION>-<PROJECT_ID>.cloudfunctions.net/republisher \
+  -H "Authorization: bearer $(gcloud auth print-identity-token)" \
   -H "Content-Type: application/json" \
   -d '{"subscriptionName": "projects/<PROJECT_ID>/subscriptions/test-queue-deadletter-sub","topicName": "projects/<PROJECT_ID>/topics/test-queue"}'
 ```
