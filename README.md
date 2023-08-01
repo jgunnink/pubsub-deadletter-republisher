@@ -49,6 +49,10 @@ Successfully republished 266 messages. Process took 7.938 seconds
 If you're planning to process thousands of messages (or more!), make sure your timeout is long enough, and you can optionally run the same
 `curl` call in multiple terminal windows for parallel processing!
 
+You may wish to also consider reviewing the messages before replaying them with message contents and run the message through your code as a
+sample test to validate that there aren't bugs with the code! Otherwise your message will just end up back in the dead letter queue in an
+infinite loop.
+
 ### Local hosting
 
 `npm start` will kick up the server and host your code on port 8080.
