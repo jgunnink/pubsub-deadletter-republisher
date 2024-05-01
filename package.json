@@ -11,7 +11,7 @@
     "start": "npx tsc-watch --onSuccess 'npx @google-cloud/functions-framework --target=republish'",
     "deploy": "gcloud functions deploy ts-template --gen2 --runtime=nodejs20 --trigger-http --allow-unauthenticated --region australia-southeast1 --entry-point=republish",
     "build": "npx tsc",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' nyc --reporter=lcov mocha -r ts-node/register 'tests/**/*.ts'"
+    "test": "nyc --reporter=lcov mocha -r ts-node/register 'tests/**/*.ts'"
   },
   "author": "JK Gunnink",
   "license": "MIT",
