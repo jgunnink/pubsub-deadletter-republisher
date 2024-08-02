@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "@google-cloud/functions-framework": "^3.4.2",
-    "@google-cloud/pubsub": "^4.4.1",
+    "@google-cloud/pubsub": "^4.5.0",
     "typescript": "^5.5.4"
   },
   "devDependencies": {
