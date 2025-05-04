@@ -16,7 +16,7 @@
   "author": "JK Gunnink",
   "license": "MIT",
   "dependencies": {
-    "@google-cloud/functions-framework": "^3.5.1",
+    "@google-cloud/functions-framework": "^4.0.0",
     "@google-cloud/pubsub": "^4.10.0",
     "typescript": "^5.8.2"
   },
