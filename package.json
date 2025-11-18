@@ -18,7 +18,7 @@
   "dependencies": {
     "@google-cloud/functions-framework": "^4.0.0",
     "@google-cloud/pubsub": "^5.1.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@types/chai": "^4.3.17",
